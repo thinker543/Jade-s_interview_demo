@@ -2,8 +2,9 @@
 Flask 应用工厂
 创建和配置 Flask 应用
 """
-from flask import Flask, jsonify
+from flask import Flask, jsonify, redirect, render_template_string
 from flask_cors import CORS
+import os
 
 from src.api.routes import user_bp
 from src.exceptions.user_exceptions import (
@@ -27,15 +28,41 @@ def create_app(config=None):
     """
     app = Flask(__name__)
     
-    # 启用 CORS
-    CORS(app)
+    # 配置 API 文档
+    app.config.update({
+        'API_TITLE': '用户管理系统 API',
+        'API_VERSION': 'v1',
+        'OPENAPI_VERSION': '3.0.3',
+        'OPENAPI_URL_PREFIX': '/api/docs',
+        'OPENAPI_SWAGGER_UI_PATH': '/swagger',
+        'OPENAPI_SWAGGER_UI_URL': 'https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/',
+        'OPENAPI_REDOC_PATH': '/redoc',
+        'OPENAPI_REDOC_URL': 'https://cdn.jsdelivr.net/npm/redoc@next/bundles/redoc.standalone.js',
+    })
     
-    # 加载配置
+    # 加载额外配置
     if config:
         app.config.update(config)
     
+    # 启用 CORS
+    CORS(app)
+    
     # 注册蓝图
-    app.register_blueprint(user_bp, url_prefix='/api/users')
+    from src.api.routes import user_bp
+    app.register_blueprint(user_bp)
+    
+    # 注册文档路由
+    @app.route('/')
+    def index():
+        """重定向到 API 文档"""
+        return redirect('/api/docs')
+    
+    @app.route('/api/docs')
+    def api_docs():
+        """API 文档页面"""
+        docs_path = os.path.join(os.path.dirname(__file__), 'templates', 'api_docs.html')
+        with open(docs_path, 'r', encoding='utf-8') as f:
+            return f.read()
     
     # 注册错误处理
     register_error_handlers(app)

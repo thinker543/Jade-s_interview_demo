@@ -12,7 +12,7 @@ from src.exceptions.user_exceptions import (
 )
 
 # 创建蓝图
-user_bp = Blueprint('users', __name__)
+user_bp = Blueprint('users', __name__, url_prefix='/api/users')
 
 # 全局用户服务实例（将在应用创建时初始化）
 _user_service = None

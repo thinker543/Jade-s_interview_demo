@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户管理系统 API 文档</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 0;
+            margin-bottom: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        header h1 {
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        header p {
+            text-align: center;
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .base-url {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .base-url code {
+            background: #f0f0f0;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 1.1em;
+            color: #667eea;
+        }
+        
+        .endpoint {
+            background: white;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .endpoint-header {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .method {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.9em;
+            margin-right: 10px;
+        }
+        
+        .method.GET { background: #61affe; color: white; }
+        .method.POST { background: #49cc90; color: white; }
+        .method.PUT { background: #fca130; color: white; }
+        .method.DELETE { background: #f93e3e; color: white; }
+        
+        .path {
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            color: #333;
+        }
+        
+        .endpoint-body {
+            padding: 20px;
+        }
+        
+        .section {
+            margin-bottom: 20px;
+        }
+        
+        .section h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .section p {
+            color: #666;
+            margin-bottom: 10px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        .example {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 10px;
+            overflow-x: auto;
+        }
+        
+        .example pre {
+            margin: 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+        
+        .status-code {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 0.85em;
+            font-weight: bold;
+            margin-right: 5px;
+        }
+        
+        .status-200 { background: #d4edda; color: #155724; }
+        .status-201 { background: #d4edda; color: #155724; }
+        .status-400 { background: #fff3cd; color: #856404; }
+        .status-401 { background: #f8d7da; color: #721c24; }
+        .status-403 { background: #f8d7da; color: #721c24; }
+        .status-404 { background: #f8d7da; color: #721c24; }
+        .status-409 { background: #fff3cd; color: #856404; }
+        
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            color: #666;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 用户管理系统 API</h1>
+            <p>完整的 RESTful API 文档</p>
+        </header>
+        
+        <div class="base-url">
+            <h2>📍 基础 URL</h2>
+            <p><code>http://localhost:5000/api/users</code></p>
+        </div>
+        
+        <!-- 创建用户 -->
+        <div class="endpoint">
+            <div class="endpoint-header">
+                <span class="method POST">POST</span>
+                <span class="path">/api/users/</span>
+            </div>
+            <div class="endpoint-body">
+                <div class="section">
+                    <h3>📝 描述</h3>
+                    <p>创建新用户账户</p>
+                </div>
+                
+                <div class="section">
+                    <h3>📥 请求体 (JSON)</h3>
+                    <table>
+                        <tr>
+                            <th>字段</th>
+                            <th>类型</th>
+                            <th>必填</th>
+                            <th>说明</th>
+                        </tr>
+                        <tr>
+                            <td><code>username</code></td>
+                            <td>string</td>
+                            <td>是</td>
+                            <td>用户名（3-20字符，字母/数字/下划线）</td>
+                        </tr>
+                        <tr>
+                            <td><code>email</code></td>
+                            <td>string</td>
+                            <td>是</td>
+                            <td>有效的邮箱地址</td>
+                        </tr>
+                        <tr>
+                            <td><code>age</code></td>
+                            <td>integer</td>
+                            <td>是</td>
+                            <td>年龄（18-150岁）</td>
+                        </tr>
+                        <tr>
+                            <td><code>password</code></td>
+                            <td>string</td>
+                            <td>是</td>
+                            <td>密码（至少8位，需包含大小写字母和数字）</td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div class="section">
+                    <h3>💡 示例请求</h3>
+                    <div class="example">
+                        <pre>{
+  "username": "john_doe",
+  "email": "john@example.com",
+  "age": 25,
+  "password": "SecurePass123!"
+}</pre>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <h3>📤 响应</h3>
+                    <p>
+                        <span class="status-code status-201">201 Created</span>
+                        用户创建成功
+                    </p>
+                    <div class="example">
+                        <pre>{
+  "success": true,
+  "message": "User created successfully",
+  "user": {
+    "user_id": "550e8400-e29b-41d4-a716-446655440000",
+    "username": "john_doe",
+    "email": "john@example.com",
+    "age": 25,
+    "created_at": "2024-01-15T10:30:00",
+    "updated_at": null,
+    "is_active": true
+  }
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 获取用户列表 -->
+        <div class="endpoint">
+            <div class="endpoint-header">
+                <span class="method GET">GET</span>
+                <span class="path">/api/users/</span>
+            </div>
+            <div class="endpoint-body">
+                <div class="section">
+                    <h3>📝 描述</h3>
+                    <p>获取所有用户的列表</p>
+                </div>
+                
+                <div class="section">
+                    <h3>🔍 查询参数</h3>
+                    <table>
+                        <tr>
+                            <th>参数</th>
+                            <th>类型</th>
+                            <th>必填</th>
+                            <th>说明</th>
+                        </tr>
+                        <tr>
+                            <td><code>active_only</code></td>
+                            <td>boolean</td>
+                            <td>否</td>
+                            <td>是否只返回活跃用户（默认 false）</td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div class="section">
+                    <h3>📤 响应</h3>
+                    <p>
+                        <span class="status-code status-200">200 OK</span>
+                        成功返回用户列表
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 获取用户详情 -->
+        <div class="endpoint">
+            <div class="endpoint-header">
+                <span class="method GET">GET</span>
+                <span class="path">/api/users/{user_id}</span>
+            </div>
+            <div class="endpoint-body">
+                <div class="section">
+                    <h3>📝 描述</h3>
+                    <p>根据用户 ID 获取用户详细信息</p>
+                </div>
+                
+                <div class="section">
+                    <h3>🔗 路径参数</h3>
+                    <table>
+                        <tr>
+                            <th>参数</th>
+                            <th>类型</th>
+                            <th>说明</th>
+                        </tr>
+                        <tr>
+                            <td><code>user_id</code></td>
+                            <td>string</td>
+                            <td>用户的唯一标识符（UUID）</td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div class="section">
+                    <h3>📤 响应</h3>
+                    <p>
+                        <span class="status-code status-200">200 OK</span>
+                        成功
+                        <span class="status-code status-404">404 Not Found</span>
+                        用户不存在
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 更新用户 -->
+        <div class="endpoint">
+            <div class="endpoint-header">
+                <span class="method PUT">PUT</span>
+                <span class="path">/api/users/{user_id}</span>
+            </div>
+            <div class="endpoint-body">
+                <div class="section">
+                    <h3>📝 描述</h3>
+                    <p>更新用户信息（所有字段可选）</p>
+                </div>
+                
+                <div class="section">
+                    <h3>📥 请求体 (JSON)</h3>
+                    <p>所有字段都是可选的，只更新提供的字段</p>
+                    <table>
+                        <tr>
+                            <th>字段</th>
+                            <th>类型</th>
+                            <th>说明</th>
+                        </tr>
+                        <tr>
+                            <td><code>username</code></td>
+                            <td>string</td>
+                            <td>新用户名</td>
+                        </tr>
+                        <tr>
+                            <td><code>email</code></td>
+                            <td>string</td>
+                            <td>新邮箱</td>
+                        </tr>
+                        <tr>
+                            <td><code>age</code></td>
+                            <td>integer</td>
+                            <td>新年龄</td>
+                        </tr>
+                        <tr>
+                            <td><code>password</code></td>
+                            <td>string</td>
+                            <td>新密码</td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div class="section">
+                    <h3>📤 响应</h3>
+                    <p>
+                        <span class="status-code status-200">200 OK</span>
+                        更新成功
+                        <span class="status-code status-404">404 Not Found</span>
+                        用户不存在
+                        <span class="status-code status-409">409 Conflict</span>
+                        用户名或邮箱已被使用
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 删除用户 -->
+        <div class="endpoint">
+            <div class="endpoint-header">
+                <span class="method DELETE">DELETE</span>
+                <span class="path">/api/users/{user_id}</span>
+            </div>
+            <div class="endpoint-body">
+                <div class="section">
+                    <h3>📝 描述</h3>
+                    <p>删除指定用户</p>
+                </div>
+                
+                <div class="section">
+                    <h3>📤 响应</h3>
+                    <p>
+                        <span class="status-code status-200">200 OK</span>
+                        删除成功
+                        <span class="status-code status-404">404 Not Found</span>
+                        用户不存在
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 用户认证 -->
+        <div class="endpoint">
+            <div class="endpoint-header">
+                <span class="method POST">POST</span>
+                <span class="path">/api/users/authenticate</span>
+            </div>
+            <div class="endpoint-body">
+                <div class="section">
+                    <h3>📝 描述</h3>
+                    <p>用户登录认证</p>
+                </div>
+                
+                <div class="section">
+                    <h3>📥 请求体 (JSON)</h3>
+                    <table>
+                        <tr>
+                            <th>字段</th>
+                            <th>类型</th>
+                            <th>必填</th>
+                            <th>说明</th>
+                        </tr>
+                        <tr>
+                            <td><code>username</code></td>
+                            <td>string</td>
+                            <td>是</td>
+                            <td>用户名</td>
+                        </tr>
+                        <tr>
+                            <td><code>password</code></td>
+                            <td>string</td>
+                            <td>是</td>
+                            <td>密码</td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div class="section">
+                    <h3>📤 响应</h3>
+                    <p>
+                        <span class="status-code status-200">200 OK</span>
+                        认证成功
+                        <span class="status-code status-401">401 Unauthorized</span>
+                        用户名或密码错误
+                        <span class="status-code status-403">403 Forbidden</span>
+                        账户已停用
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 激活/停用用户 -->
+        <div class="endpoint">
+            <div class="endpoint-header">
+                <span class="method POST">POST</span>
+                <span class="path">/api/users/{user_id}/activate</span>
+            </div>
+            <div class="endpoint-body">
+                <div class="section">
+                    <h3>📝 描述</h3>
+                    <p>激活已停用的用户账户</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="endpoint">
+            <div class="endpoint-header">
+                <span class="method POST">POST</span>
+                <span class="path">/api/users/{user_id}/deactivate</span>
+            </div>
+            <div class="endpoint-body">
+                <div class="section">
+                    <h3>📝 描述</h3>
+                    <p>停用用户账户</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 搜索用户 -->
+        <div class="endpoint">
+            <div class="endpoint-header">
+                <span class="method GET">GET</span>
+                <span class="path">/api/users/search</span>
+            </div>
+            <div class="endpoint-body">
+                <div class="section">
+                    <h3>📝 描述</h3>
+                    <p>按关键词搜索用户（用户名或邮箱）</p>
+                </div>
+                
+                <div class="section">
+                    <h3>🔍 查询参数</h3>
+                    <table>
+                        <tr>
+                            <th>参数</th>
+                            <th>类型</th>
+                            <th>必填</th>
+                            <th>说明</th>
+                        </tr>
+                        <tr>
+                            <td><code>keyword</code></td>
+                            <td>string</td>
+                            <td>是</td>
+                            <td>搜索关键词</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 获取用户数量 -->
+        <div class="endpoint">
+            <div class="endpoint-header">
+                <span class="method GET">GET</span>
+                <span class="path">/api/users/count</span>
+            </div>
+            <div class="endpoint-body">
+                <div class="section">
+                    <h3>📝 描述</h3>
+                    <p>获取系统中的用户总数</p>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2024 用户管理系统 API | Built with Flask</p>
+        </footer>
+    </div>
+</body>
+</html>
