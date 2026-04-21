@@ -1,2 +1,3 @@
-# nocobase-test-demo
-learning testing skills for low code platform
+# Jade's interview demo
+
+prepare to interview

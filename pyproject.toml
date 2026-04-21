@@ -1,0 +1,51 @@
+# Pytest 配置文件
+[tool.pytest.ini_options]
+# 测试发现配置
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+
+# 标记配置
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "e2e: marks tests as end-to-end tests",
+]
+
+# 输出配置
+addopts = [
+    "-v",                      # 详细输出
+    "--tb=short",              # 简短的 traceback
+    "--strict-markers",        # 严格标记检查
+    "--disable-warnings",      # 禁用警告
+]
+
+# 最小版本要求
+minversion = "7.0"
+
+# 日志配置
+log_cli = true
+log_cli_level = "INFO"
+log_cli_format = "%(asctime)s [%(levelname)8s] %(message)s (%(filename)s:%(lineno)s)"
+log_cli_date_format = "%Y-%m-%d %H:%M:%S"
+
+# 覆盖率配置（需要 pytest-cov）
+[tool.coverage.run]
+source = ["src"]
+omit = [
+    "*/tests/*",
+    "*/test_*",
+    "*/__init__.py",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+]
+show_missing = true
+fail_under = 80
